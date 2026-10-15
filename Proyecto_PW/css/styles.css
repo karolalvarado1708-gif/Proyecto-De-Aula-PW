@@ -430,3 +430,24 @@ h3{margin:0 0 .4rem;
  .footer{padding:1rem}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+/* ---- imagen del login y cerrar sesión ---- */
+.login-box .sidebar nav a.logout{margin-top:.8rem;border:1px solid #4a463e;color:#ffb4b4}
+.sidebar nav a.logout:hover{background:var(--red);border-color:var(--red);color:#fff}
+.logout-btn{padding:.4rem .8rem;font-size:.85rem}
+.sidebar{height:100vh;height:100dvh;overflow-y:auto}
+@media(max-width:640px){
+ .login-box  .login-panel{align-items:flex-start;padding:1.2rem}
+ .filters select,.filters .btn{width:100%;flex:1 1 100%}
+ .topbar{padding:.7rem .8rem;gap:.5rem}
+ .user{gap:.5rem}
+ .crumbs{font-size:.78rem}
+ .row-between{flex-wrap:wrap}
+}
+
+/* ---- foto del taller en el login (como el diseño) ---- */
+.login-hero{background-image:linear-gradient(180deg,rgba(20,24,32,.88) 0%,rgba(20,24,32,.55) 55%,rgba(20,24,32,.35) 100%),url("../images/taller-hero.jpg");background-size:cover;background-position:center bottom}
+.login-banner{display:none}
+@media(max-width:640px){
+ .login-banner{display:flex;align-items:flex-end;height:150px;margin-top:1.5rem;padding:1rem;border-radius:12px;color:#fff;font-weight:700;font-size:1.05rem;
+  background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.7)),url("../images/taller-banner.jpg") center/cover}
+}
