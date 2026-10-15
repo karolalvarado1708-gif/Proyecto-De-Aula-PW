@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Nuevo repuesto · Taller de Repuestos KS</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app">
+<aside class="sidebar" id="sidebar"><div class="logo"><b>KS</b>
+    <span>Taller de Repuestos KS<small>CONSOLA DE INVENTARIO</small>
+    </span>
+</div>
+<nav aria-label="Principal"><h3>GESTIÓN DEL TALLER</h3>
+    <a href="inventario.html">Inventario</a>
+    <a href="nuevo.html" class="active" aria-current="page">Nuevo repuesto</a>
+</nav>
+<div class="side-note"><b>Acceso de administrador</b>Solo personal autorizado puede modificar existencias.</div>
+</aside>
+<div class="main">
+    <header class="topbar">
+        <div style="display:flex;align-items:center;gap:.8rem">
+            <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false">☰</button>
+            <div class="crumbs">Inventario / <b>Registrar nuevo repuesto</b>
+            </div>
+        </div>
+<div class="user">
+    <div>Carlos Ramírez<small>Administrador</small>
+    </div>
+    <span class="avatar">CR</span>
+</div>
+</header>
+<main class="content">
+    <div class="page-head"><div>
+        <p class="kicker">ALTA DE REPUESTO</p>
+        <h1>Registrar nuevo repuesto</h1>
+        <p>Completa la información para agregar una nueva referencia al inventario.</p>
+    </div>
+    <a class="btn" href="inventario.html">← Volver al inventario</a>
+</div>
+<div class="alert error" id="formError" role="alert" hidden></div>
+<div class="alert ok" id="formOk" role="status" hidden></div>
+<p style="color:var(--mut);font-size:.85rem">Los campos con * son obligatorios.</p>
+<div class="form-grid">
+    <div>
+        <form id="partForm" novalidate>
+<div class="card">
+    <h2>Identificación y compatibilidad</h2>
+    <p>Datos para encontrar el repuesto correcto.</p>
+    <div class="cols">
+<div class="field">
+    <label for="sku">Código / SKU *</label>
+    <input id="sku" name="sku" placeholder="Ej. FIL-007" data-rule="req">
+    <div class="hint">Usa un código único para identificar el repuesto.</div>
+    <div class="err" id="sku-err" role="alert" data-default="El SKU es obligatorio.">
+    </div>
+</div>
+<div class="field">
+    <label for="nombre">Nombre del repuesto *</label>
+    <input id="nombre" name="nombre" placeholder="Ej. Filtro de aceite" data-rule="req">
+    <div class="hint">&nbsp;</div>
+    <div class="err" id="nombre-err" role="alert" data-default="El nombre es obligatorio. Escribe el nombre del repuesto."></div>
+</div>
+<div class="field">
+    <label for="categoria">Categoría *</label>
+    <select id="categoria" name="categoria" data-rule="req">
+        <option value="">Selecciona una categoría</option>
+        <option>Filtros</option>
+        <option>Frenos</option>
+        <option>Encendido</option>
+        <option>Suspensión</option>
+        <option>Motor</option>
+    </select>
+    <div class="hint">&nbsp;</div>
+    <div class="err">Selecciona una categoría.</div>
+</div>
+<div class="field">
+    <label for="marca">Marca *</label>
+    <input id="marca" name="marca" placeholder="Ej. Bosch" data-rule="req">
+    <div class="hint">&nbsp;</div>
+    <div class="err" id="marca-err" role="alert" data-default="La marca es obligatoria."></div>
+</div>
+<div class="field full">
+    <label for="comp">Compatibilidad vehicular *</label>
+    <input id="comp" name="comp" placeholder="Ej. Renault Logan 1.6 2010–2020" data-rule="req">
+    <div class="hint">Indica modelo, motorización y años compatibles.</div>
+    <div class="err" id="comp-err" role="alert" data-default="Indica el vehículo compatible."></div>
+</div>
+</div>
+</div>
+<div class="card">
+    <h2>Precio y existencias</h2>
+    <p>Controla cantidades, mínimos y ubicación.</p>
+    <div class="cols">
+<div class="field">
+    <label for="precio">Precio de venta (COP) *</label>
+    <input id="precio" name="precio" placeholder="Ej. 38.000" data-rule="price">
+    <div class="hint">Pesos colombianos, sin decimales.</div>
+    <div class="err" id="precio-err" role="alert" data-default="Ingresa un valor numérico mayor que 0. Ejemplo: 38000."></div>
+</div>
+<div class="field">
+    <label for="cant">Cantidad disponible *</label>
+    <input id="cant" name="cant" placeholder="Ej. 18" data-rule="int">
+    <div class="hint">Unidades físicas disponibles.</div>
+    <div class="err" id="cant-err" role="alert" data-default="La cantidad no puede ser negativa. Usa un entero de 0 o más."></div>
+</div>
+<div class="field">
+    <label for="min">Stock mínimo *</label>
+    <input id="min" name="min" placeholder="Ej. 5" data-rule="int">
+    <div class="hint">Umbral para alertar sobre faltantes.</div>
+    <div class="err" id="min-err" role="alert" data-default="Ingresa un entero de 0 o más."></div>
+</div>
+<div class="field">
+    <label for="ubi">Ubicación en el taller *</label>
+    <input id="ubi" name="ubi" placeholder="Ej. Estante A-02" data-rule="req">
+    <div class="hint">&nbsp;</div>
+    <div class="err" id="ubi-err" role="alert" data-default="Indica dónde está guardado el repuesto."></div>
+</div>
+</div>
+</div>
+<div class="card">
+    <h2>Abastecimiento y detalle</h2>
+    <p>Información de apoyo para la reposición.</p>
+<div class="field">
+    <label for="prov">Proveedor *</label>
+    <input id="prov" name="prov" placeholder="Ej. Autopartes Andina" data-rule="req">
+    <div class="hint">&nbsp;</div>
+    <div class="err" id="prov-err" role="alert" data-default="El proveedor es obligatorio."></div>
+</div>
+<div class="field" style="margin-top:1rem">
+    <label for="desc">Descripción</label>
+    <textarea id="desc" name="desc" placeholder="Referencia técnica, características y recomendaciones…"></textarea>
+</div>
+</div>
+<div class="actions">
+    <a class="btn" href="inventario.html">Cancelar</a>
+    <button class="btn primary" type="submit">Guardar repuesto</button>
+</div>
+</form>
+</div>
+<aside class="aside">
+    <div class="card tip">
+        <h3>Antes de guardar</h3>
+        <p>Verifica que el SKU no esté registrado, confirma la compatibilidad y cuenta las unidades disponibles en el taller.</p>
+        <p>Todos los precios se registran en pesos colombianos (COP).</p>
+    </div>
+</aside>
+</div>
+</main>
+<footer class="footer">
+    <span>KS Inventario v1.0</span>
+    <span>Taller, orden y control.</span>
+    <span>Taller de Repuestos KS · Acceso restringido al administrador</span>
+</footer>
+</div>
+</div>
+<script src="js/app.js"></script>
+</body>
+</html>
