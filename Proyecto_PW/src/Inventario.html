@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Repuestos guardados · Taller de Repuestos KS</title>
+<link rel="stylesheet" href="css/styles.css">
+
+</head>
+<body>
+    <div class="app">
+<aside class="sidebar" id="sidebar">
+    <div class="logo"><b>KS</b>
+        <span>Taller de Repuestos KS<small>CONSOLA DE INVENTARIO</small>
+        </span>
+    </div>
+<nav aria-label="Principal">
+    <h3>GESTIÓN DEL TALLER</h3>
+    <a href="inventario.html" class="active" aria-current="page">Inventario</a>
+    <a href="nuevo.html">Nuevo repuesto</a>
+</nav>
+<div class="side-note"><b>Acceso de administrador</b>Solo personal autorizado puede modificar existencias.</div>
+</aside>
+<div class="main">
+    <header class="topbar">
+        <div style="display:flex;align-items:center;gap:.8rem">
+        <button class="menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false">☰</button>
+        <div class="crumbs">Inventario / <b>Repuestos guardados</b>
+        </div>
+    </div>
+<div class="user">
+    <div>Carlos Ramírez<small>Administrador</small>
+</div>
+<span class="avatar">CR</span>
+</div>
+</header>
+<main class="content">
+    <div class="page-head"><div>
+        <h1>Repuestos guardados</h1>
+        <p>Consulta existencias y mantén tu inventario al día.</p>
+    </div><a class="btn primary" href="nuevo.html">+ Nuevo repuesto</a>
+</div>
+<section class="stats" aria-label="Resumen">
+    <div class="stat">
+        <span>Repuestos</span>
+        <strong id="stRef">6</strong>
+        <small>Referencias guardadas</small>
+    </div>
+<div class="stat"><span>Unidades</span>
+    <strong id="stUni">69</strong>
+    <small>Disponibles en el taller</small>
+</div>
+<div class="stat warn">
+    <span>Stock bajo</span>
+    <strong id="stLow">2</strong>
+    <small>Requieren reposición</small>
+</div>
+</section>
+<div class="alert" id="lowAlert">2 repuestos están por debajo del stock mínimo. Revisa frenos y suspensión.</div>
+<div class="filters">
+    <input type="search" id="q" placeholder="Buscar por nombre, SKU o marca" aria-label="Buscar">
+    <select id="cat" aria-label="Categoría">
+        <option value="">Todas las categorías</option>
+        <option>Encendido</option>
+        <option>Filtros</option>
+        <option>Frenos</option>
+        <option>Motor</option>
+        <option>Suspensión</option>
+    </select>
+    <button class="btn toggle" id="lowBtn" type="button" aria-pressed="false">Stock bajo</button>
+</div>
+<div class="table" id="table">
+    <div class="tr th">
+        <div>REPUESTO / SKU</div>
+    <div>COMPATIBILIDAD</div>
+    <div>PRECIO COP</div>
+    <div>STOCK</div>
+    <div>UBICACIÓN</div>
+    <div>ACCIONES</div>
+</div>
+
+<article class="tr" data-name="filtro de aceite" data-sku="fil-001" data-brand="bosch" data-cat="Filtros" data-stock="18" data-min="5" data-low="false">
+<div>
+    <div class="name">Filtro de aceite</div>
+    <div class="sku">FIL-001 · Bosch · Filtros</div>
+</div>
+<div>
+    <span class="lbl">COMPATIBILIDAD</span>Renault Logan / Sandero 1.6 2010–2020</div>
+<div>
+    <span class="lbl">PRECIO COP</span>
+    <b>$ 38.000</b>
+</div>
+<div>
+    <span class="lbl">STOCK</span>18 uds. <span class="badge">Disponible</span>
+    <span class="min">Mín. 5</span>
+</div>
+<div>
+    <span class="lbl">UBICACIÓN</span>Estante A-02
+</div>
+<div class="acts">
+    <a class="link" href="editar.html">Editar</a>
+    <button class="link del" type="button" data-delete>Eliminar</button>
+</div>
+</article>
+<article class="tr" data-name="pastillas de freno" data-sku="fre-002" data-brand="brembo" data-cat="Frenos" data-stock="4" data-min="6" data-low="true">
+<div>
+    <div class="name">Pastillas de freno</div>
+    <div class="sku">FRE-002 · Brembo · Frenos</div>
+</div>
+<div><span class="lbl">COMPATIBILIDAD</span>Chevrolet Aveo 1.6 2006–2015</div>
+<div><span class="lbl">PRECIO COP</span>
+    <b>$ 125.000</b>
+</div>
+<div><span class="lbl">STOCK</span>4 uds. <span class="badge low">Stock bajo</span>
+    <span class="min">Mín. 6</span>
+</div>
+<div>
+    <span class="lbl">UBICACIÓN</span>Estante B-01
+</div>
+<div class="acts"><a class="link" href="editar.html">Editar</a>
+    <button class="link del" type="button" data-delete>Eliminar</button>
+</div>
+</article>
+<article class="tr" data-name="bujía de encendido" data-sku="enc-003" data-brand="ngk" data-cat="Encendido" data-stock="24" data-min="8" data-low="false">
+<div>
+    <div class="name">Bujía de encendido</div>
+    <div class="sku">ENC-003 · NGK · Encendido</div>
+</div>
+<div>
+    <span class="lbl">COMPATIBILIDAD</span>Kia Picanto 1.0 2012–2018
+</div>
+<div>
+    <span class="lbl">PRECIO COP</span>
+    <b>$ 24.000</b></div>
+<div>
+    <span class="lbl">STOCK</span>24 uds.
+    <span class="badge">Disponible</span>
+    <span class="min">Mín. 8</span>
+</div>
+<div>
+    <span class="lbl">UBICACIÓN</span>Estante C-03
+</div>
+<div class="acts">
+    <a class="link" href="editar.html">Editar</a>
+    <button class="link del" type="button" data-delete>Eliminar</button>
+</div>
+</article>
+<article class="tr" data-name="filtro de aire" data-sku="fil-004" data-brand="mann" data-cat="Filtros" data-stock="12" data-min="4" data-low="false">
+<div>
+    <div class="name">Filtro de aire</div>
+    <div class="sku">FIL-004 · Mann · Filtros</div>
+</div>
+<div>
+    <span class="lbl">COMPATIBILIDAD</span>Mazda 3 2.0 2014–2019
+</div>
+<div>
+    <span class="lbl">PRECIO COP</span>
+    <b>$ 52.000</b>
+</div>
+<div>
+    <span class="lbl">STOCK</span>12 uds. <span class="badge">Disponible</span>
+    <span class="min">Mín. 4</span>
+</div>
+<div>
+    <span class="lbl">UBICACIÓN</span>Estante A-03
+</div>
+<div class="acts">
+    <a class="link" href="editar.html">Editar</a>
+    <button class="link del" type="button" data-delete>Eliminar</button>
+</div>
+</article>
+<article class="tr" data-name="amortiguador delantero" data-sku="sus-005" data-brand="monroe" data-cat="Suspensión" data-stock="3" data-min="4" data-low="true">
+<div>
+    <div class="name">Amortiguador delantero</div>
+    <div class="sku">SUS-005 · Monroe · Suspensión</div>
+</div>
+<div>
+    <span class="lbl">COMPATIBILIDAD</span>Renault Duster 1.6 2013–2020
+</div>
+<div>
+    <span class="lbl">PRECIO COP</span>
+    <b>$ 285.000</b>
+</div>
+<div>
+    <span class="lbl">STOCK</span>3 uds.
+     <span class="badge low">Stock bajo</span>
+    <span class="min">Mín. 4</span>
+</div>
+<div>
+    <span class="lbl">UBICACIÓN</span>Estante D-01
+</div>
+<div class="acts">
+    <a class="link" href="editar.html">Editar</a>
+    <button class="link del" type="button" data-delete>Eliminar</button>
+</div>
+</article>
+<article class="tr" data-name="correa de distribución" data-sku="mot-006" data-brand="gates" data-cat="Motor" data-stock="8" data-min="3" data-low="false">
+<div>
+    <div class="name">Correa de distribución</div>
+    <div class="sku">MOT-006 · Gates · Motor</div>
+</div>
+<div>
+    <span class="lbl">COMPATIBILIDAD</span>Chevrolet Spark 1.0 2005–2015
+</div>
+<div>
+    <span class="lbl">PRECIO COP</span>
+    <b>$ 96.000</b>
+</div>
+<div>
+    <span class="lbl">STOCK</span>8 uds. <span class="badge">Disponible</span>
+    <span class="min">Mín. 3</span>
+</div>
+<div>
+    <span class="lbl">UBICACIÓN</span>Estante E-02
+</div>
+<div class="acts">
+    <a class="link" href="editar.html">Editar</a>
+    <button class="link del" type="button" data-delete>Eliminar</button>
+</div>
+</article>
+<div class="empty" id="empty" hidden>No hay repuestos que coincidan con la búsqueda.
+</div>
+<div class="tfoot" id="count">Mostrando 6 de 6 repuestos</div>
+</div>
+<div class="overlay" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <div class="modal">
+        <h2 id="mTitle">¿Eliminar este repuesto?</h2>
+<p>Se retirará del inventario el siguiente registro y sus existencias asociadas.</p>
+<div class="pick" id="mInfo"></div>
+<p class="warn">Esta acción es permanente y no se puede deshacer. Verifica el SKU antes de confirmar.</p>
+<div class="actions">
+    <button class="btn" type="button" id="mCancel">Cancelar</button>
+    <button class="btn danger" type="button" id="mOk">Confirmar eliminación</button>
+</div>
+</div>
+</div>
+</main>
+<footer class="footer"><span>KS Inventario v1.0</span>
+    <span>Taller, orden y control.</span>
+    <span>Taller de Repuestos KS · Acceso restringido al administrador</span>
+</footer>
+</div>
+</div>
+<script src="js/app.js"></script>
+</body>
+</html>
