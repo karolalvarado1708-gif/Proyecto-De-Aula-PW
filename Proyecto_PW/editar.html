@@ -136,6 +136,12 @@
     <div class="err" id="prov-err" role="alert" data-default="El proveedor es obligatorio."></div>
 </div>
 <div class="field" style="margin-top:1rem">
+    <label for="foto">Foto del repuesto</label>
+    <input type="file" id="foto" name="foto" accept="image/*">
+    <div class="hint">Opcional. JPG o PNG; se recomienda una imagen cuadrada.</div>
+    <img id="preview" class="thumb" src="images/repuestos/filtro-aceite.jpg" alt="Foto actual: Filtro de aceite Bosch" style="margin-top:.6rem;width:96px;height:96px">
+</div>
+<div class="field" style="margin-top:1rem">
     <label for="desc">Descripción</label>
     <textarea id="desc" name="desc" placeholder="Referencia técnica, características y recomendaciones…">
         Filtro de aceite roscado Bosch. Referencia 0451103336. Cambio recomendado según el plan de mantenimiento del vehículo.</textarea>

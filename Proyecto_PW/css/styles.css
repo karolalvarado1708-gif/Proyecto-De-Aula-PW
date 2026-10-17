@@ -451,3 +451,8 @@ h3{margin:0 0 .4rem;
  .login-banner{display:flex;align-items:flex-end;height:150px;margin-top:1.5rem;padding:1rem;border-radius:12px;color:#fff;font-weight:700;font-size:1.05rem;
   background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.7)),url("../images/taller-banner.jpg") center/cover}
 }
+
+/* miniaturas de repuestos */
+.item{display:flex;align-items:center;gap:.8rem}
+.thumb{width:56px;height:56px;flex-shrink:0;object-fit:cover;border-radius:10px;border:1px solid var(--line);background:#faf9f6}
+@media (max-width:640px){.thumb{width:64px;height:64px}}

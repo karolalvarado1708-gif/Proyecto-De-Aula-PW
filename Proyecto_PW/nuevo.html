@@ -45,7 +45,7 @@
 <p style="color:var(--mut);font-size:.85rem">Los campos con * son obligatorios.</p>
 <div class="form-grid">
     <div>
-        <form id="partForm" novalidate>
+        <form id="partForm" data-mode="nuevo" novalidate>
 <div class="card">
     <h2>Identificación y compatibilidad</h2>
     <p>Datos para encontrar el repuesto correcto.</p>
@@ -128,6 +128,12 @@
     <input id="prov" name="prov" placeholder="Ej. Autopartes Andina" data-rule="req">
     <div class="hint">&nbsp;</div>
     <div class="err" id="prov-err" role="alert" data-default="El proveedor es obligatorio."></div>
+</div>
+<div class="field" style="margin-top:1rem">
+    <label for="foto">Foto del repuesto</label>
+    <input type="file" id="foto" name="foto" accept="image/*">
+    <div class="hint">Opcional. JPG o PNG; se recomienda una imagen cuadrada.</div>
+    <img id="preview" class="thumb" alt="Vista previa de la foto" hidden style="margin-top:.6rem;width:96px;height:96px">
 </div>
 <div class="field" style="margin-top:1rem">
     <label for="desc">Descripción</label>
