@@ -1,76 +1,102 @@
 /* ===== VISTA · inventarioVista.js =====
    Todo lo que se ve en la pantalla del inventario (tabla, resumen y ventana
-   de confirmación). */
+   de confirmación). La tabla se construye con JavaScript usando el DOM. */
 
-const SIN_FOTO = 'images/repuestos/sin-foto.svg';
+// Crea un elemento (div, span, img...) con su clase y su texto
+function crearElemento(etiqueta, clase, texto) {
+  let elemento = document.createElement(etiqueta);
+  if (clase !== '') {
+    elemento.className = clase;
+  }
+  if (texto !== '') {
+    elemento.textContent = texto;
+  }
+  return elemento;
+}
 
-// Crea el HTML de una fila de la tabla para un repuesto guardado
-function crearFilaHTML(rep) {
-  let bajo = esStockBajo(rep.stock, rep.min);
+// Crea una celda de la fila: un título pequeño (lbl) y su contenido
+function crearCelda(titulo, contenido) {
+  let celda = document.createElement('div');
+  celda.appendChild(crearElemento('span', 'lbl', titulo));
+  celda.append(contenido);
+  return celda;
+}
+
+// Celda con la foto, el nombre y el SKU
+function crearCeldaRepuesto(rep) {
   let foto = rep.foto;
   if (!foto) {
     foto = SIN_FOTO;
   }
+  let imagen = crearElemento('img', 'thumb', '');
+  imagen.src = foto;
+  imagen.alt = rep.nombre + ' ' + rep.marca;
+  imagen.loading = 'lazy';
+  imagen.width = 56;
+  imagen.height = 56;
+
+  let textos = document.createElement('div');
+  textos.appendChild(crearElemento('div', 'name', rep.nombre));
+  textos.appendChild(crearElemento('div', 'sku', rep.sku + ' · ' + rep.marca + ' · ' + rep.categoria));
+
+  let celda = crearElemento('div', 'item', '');
+  celda.appendChild(imagen);
+  celda.appendChild(textos);
+  return celda;
+}
+
+// Celda de stock: unidades, estado (Disponible / Stock bajo) y mínimo
+function crearCeldaStock(rep) {
   let claseEstado = 'badge';
   let textoEstado = 'Disponible';
-  if (bajo) {
+  if (esStockBajo(rep.stock, rep.min)) {
     claseEstado = 'badge low';
     textoEstado = 'Stock bajo';
   }
-
-  let html = '';
-  html += '<article class="tr" data-custom';
-  html += ' data-name="' + escapar(rep.nombre.toLowerCase()) + '"';
-  html += ' data-sku="' + escapar(rep.sku.toLowerCase()) + '"';
-  html += ' data-brand="' + escapar(rep.marca.toLowerCase()) + '"';
-  html += ' data-cat="' + escapar(rep.categoria) + '"';
-  html += ' data-stock="' + rep.stock + '"';
-  html += ' data-min="' + rep.min + '"';
-  html += ' data-low="' + bajo + '">';
-  html += '<div class="item">';
-  html += '<img class="thumb" src="' + escapar(foto) + '" alt="' + escapar(rep.nombre + ' ' + rep.marca) + '" loading="lazy" width="56" height="56">';
-  html += '<div>';
-  html += '<div class="name">' + escapar(rep.nombre) + '</div>';
-  html += '<div class="sku">' + escapar(rep.sku) + ' · ' + escapar(rep.marca) + ' · ' + escapar(rep.categoria) + '</div>';
-  html += '</div></div>';
-  html += '<div><span class="lbl">COMPATIBILIDAD</span>' + escapar(rep.comp) + '</div>';
-  html += '<div><span class="lbl">PRECIO COP</span><b>$ ' + rep.precio.toLocaleString('es-CO') + '</b></div>';
-  html += '<div><span class="lbl">STOCK</span>' + rep.stock + ' uds. ';
-  html += '<span class="' + claseEstado + '">' + textoEstado + '</span>';
-  html += '<span class="min">Mín. ' + rep.min + '</span></div>';
-  html += '<div><span class="lbl">UBICACIÓN</span>' + escapar(rep.ubi) + '</div>';
-  html += '<div class="acts">';
-  html += '<a class="link" href="editar.html">Editar</a>';
-  html += '<button class="link del" type="button" data-delete>Eliminar</button>';
-  html += '</div>';
-  html += '</article>';
-  return html;
+  let celda = crearCelda('STOCK', rep.stock + ' uds. ');
+  celda.appendChild(crearElemento('span', claseEstado, textoEstado));
+  celda.appendChild(crearElemento('span', 'min', 'Mín. ' + rep.min));
+  return celda;
 }
 
-// Agrega a la tabla los repuestos que el usuario guardó
-function pintarRepuestosGuardados(lista) {
-  let html = '';
-  for (let i = 0; i < lista.length; i++) {
-    html += crearFilaHTML(lista[i]);
+// Celda con los botones Editar y Eliminar
+function crearCeldaAcciones(rep) {
+  let enlaceEditar = crearElemento('a', 'link', 'Editar');
+  enlaceEditar.href = 'editar.html?sku=' + encodeURIComponent(rep.sku);
+
+  let botonEliminar = crearElemento('button', 'link del', 'Eliminar');
+  botonEliminar.type = 'button';
+  botonEliminar.setAttribute('data-delete', '');
+
+  let celda = crearElemento('div', 'acts', '');
+  celda.appendChild(enlaceEditar);
+  celda.appendChild(botonEliminar);
+  return celda;
+}
+
+// Crea la fila completa de la tabla para un repuesto
+function crearFila(rep) {
+  let fila = crearElemento('article', 'tr', '');
+  fila.dataset.sku = rep.sku;
+  fila.appendChild(crearCeldaRepuesto(rep));
+  fila.appendChild(crearCelda('COMPATIBILIDAD', rep.comp));
+  fila.appendChild(crearCelda('PRECIO COP', crearElemento('b', '', '$ ' + rep.precio.toLocaleString('es-CO'))));
+  fila.appendChild(crearCeldaStock(rep));
+  fila.appendChild(crearCelda('UBICACIÓN', rep.ubi));
+  fila.appendChild(crearCeldaAcciones(rep));
+  return fila;
+}
+
+// Borra las filas que hay en la tabla y dibuja las de la lista
+function pintarTabla(lista) {
+  let filasViejas = document.querySelectorAll('#table .tr[data-sku]');
+  for (let i = 0; i < filasViejas.length; i++) {
+    filasViejas[i].remove();
   }
-  document.getElementById('empty').insertAdjacentHTML('beforebegin', html);
-}
-
-// Todas las filas de repuestos de la tabla
-function obtenerFilas() {
-  return document.querySelectorAll('#table .tr[data-sku]');
-}
-
-// Lee los datos de una fila (están guardados en sus atributos data-...)
-function leerFila(fila) {
-  return {
-    nombre: fila.dataset.name,
-    sku: fila.dataset.sku,
-    marca: fila.dataset.brand,
-    categoria: fila.dataset.cat,
-    stock: Number(fila.dataset.stock),
-    minimo: Number(fila.dataset.min)
-  };
+  let vacio = document.getElementById('empty');
+  for (let i = 0; i < lista.length; i++) {
+    vacio.before(crearFila(lista[i]));
+  }
 }
 
 // Lee lo que el usuario puso en el buscador, la categoría y el botón Stock bajo
@@ -89,10 +115,6 @@ function alternarBotonStockBajo() {
   boton.setAttribute('aria-pressed', !activo);
 }
 
-function ocultarFila(fila, ocultar) {
-  fila.hidden = ocultar;
-}
-
 // Actualiza los números de arriba, el contador y los avisos
 function mostrarResumen(totalFilas, mostradas, unidades, bajos) {
   document.getElementById('empty').hidden = mostradas > 0;
@@ -106,11 +128,11 @@ function mostrarResumen(totalFilas, mostradas, unidades, bajos) {
   alerta.textContent = bajos + ' repuestos están por debajo del stock mínimo.';
 }
 
-// Abre la ventana "¿Eliminar este repuesto?" con los datos de la fila
-function abrirModal(fila) {
-  let info = '<b>' + escapar(fila.querySelector('.name').textContent) + '</b><br>';
-  info += escapar(fila.querySelector('.sku').textContent) + '<br>';
-  info += fila.dataset.stock + ' unidades · Mínimo ' + fila.dataset.min;
+// Abre la ventana "¿Eliminar este repuesto?" con los datos del repuesto
+function abrirModal(rep) {
+  let info = '<b>' + escapar(rep.nombre) + '</b><br>';
+  info += escapar(rep.sku + ' · ' + rep.marca + ' · ' + rep.categoria) + '<br>';
+  info += rep.stock + ' unidades · Mínimo ' + rep.min;
   document.getElementById('mInfo').innerHTML = info;
   document.getElementById('modal').classList.add('open');
   document.getElementById('mCancel').focus();

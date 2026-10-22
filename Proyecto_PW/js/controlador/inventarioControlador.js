@@ -1,82 +1,48 @@
 /* ===== CONTROLADOR · inventarioControlador.js =====
    Conecta la pantalla del inventario con los datos:
-   filtros, contadores y eliminar repuestos. */
+   listado, buscador, contadores y eliminar repuestos. */
 
-let filaSeleccionada = null;   // fila que se quiere eliminar
+let skuSeleccionado = null;   // SKU del repuesto que se quiere eliminar
 let botonQueAbrio = null;      // botón Eliminar que se presionó
 
-// Revisa los filtros, oculta las filas que no coinciden y actualiza el resumen
+// Lee los datos, aplica los filtros, dibuja la tabla y actualiza el resumen
 function actualizarInventario() {
-  let filtros = leerFiltros();
-  let filas = obtenerFilas();
-  let mostradas = 0;
+  let todos = obtenerRepuestos();
+  let visibles = filtrarRepuestos(todos, leerFiltros());
   let unidades = 0;
   let bajos = 0;
 
-  for (let i = 0; i < filas.length; i++) {
-    let datos = leerFila(filas[i]);
-    let bajo = esStockBajo(datos.stock, datos.minimo);
-    let coincide = true;
-
-    // Filtro del buscador: nombre, SKU o marca
-    if (filtros.texto !== '') {
-      let enNombre = datos.nombre.includes(filtros.texto);
-      let enSku = datos.sku.includes(filtros.texto);
-      let enMarca = datos.marca.includes(filtros.texto);
-      if (!enNombre && !enSku && !enMarca) {
-        coincide = false;
-      }
-    }
-    // Filtro de categoría
-    if (filtros.categoria !== '' && datos.categoria !== filtros.categoria) {
-      coincide = false;
-    }
-    // Filtro de stock bajo
-    if (filtros.soloBajo && !bajo) {
-      coincide = false;
-    }
-
-    ocultarFila(filas[i], !coincide);
-
-    if (coincide) {
-      mostradas++;
-    }
-    unidades = unidades + datos.stock;
-    if (bajo) {
+  for (let i = 0; i < todos.length; i++) {
+    unidades = unidades + todos[i].stock;
+    if (esStockBajo(todos[i].stock, todos[i].min)) {
       bajos++;
     }
   }
 
-  mostrarResumen(filas.length, mostradas, unidades, bajos);
+  pintarTabla(visibles);
+  mostrarResumen(todos.length, visibles.length, unidades, bajos);
 }
 
 // Cierra la ventana sin eliminar nada
 function cancelarEliminar() {
   cerrarModal();
-  filaSeleccionada = null;
+  skuSeleccionado = null;
   if (botonQueAbrio !== null) {
     botonQueAbrio.focus();
   }
 }
 
-// Elimina la fila elegida
+// Elimina el repuesto elegido (de localStorage y de la tabla)
 function confirmarEliminar() {
-  // Si es un repuesto guardado por el usuario, también se borra de localStorage
-  if (filaSeleccionada.hasAttribute('data-custom')) {
-    eliminarRepuesto(filaSeleccionada.dataset.sku);
-  }
-  filaSeleccionada.remove();
-  filaSeleccionada = null;
+  eliminarRepuesto(skuSeleccionado);
+  skuSeleccionado = null;
   cerrarModal();
   actualizarInventario();
 }
 
 /* ----- Al cargar la página ----- */
 
-// 1. Mostrar los repuestos que el usuario guardó
-pintarRepuestosGuardados(obtenerRepuestos());
-
-// 2. Filtros
+// 1. Filtros: el buscador filtra mientras se escribe
 document.getElementById('q').addEventListener('input', actualizarInventario);
 document.getElementById('cat').addEventListener('change', actualizarInventario);
 document.getElementById('lowBtn').addEventListener('click', function () {
@@ -84,19 +50,19 @@ document.getElementById('lowBtn').addEventListener('click', function () {
   actualizarInventario();
 });
 
-// 3. Botones Eliminar (se escucha en la tabla completa para que
-//    también funcionen en las filas que se agregaron con JavaScript)
+// 2. Botones Eliminar (se escucha en la tabla completa para que
+//    también funcionen en las filas que se dibujan con JavaScript)
 document.getElementById('table').addEventListener('click', function (evento) {
   let boton = evento.target.closest('[data-delete]');
   if (boton === null) {
     return;
   }
   botonQueAbrio = boton;
-  filaSeleccionada = boton.closest('.tr');
-  abrirModal(filaSeleccionada);
+  skuSeleccionado = boton.closest('.tr').dataset.sku;
+  abrirModal(buscarRepuesto(skuSeleccionado));
 });
 
-// 4. Ventana de confirmación
+// 3. Ventana de confirmación
 document.getElementById('mCancel').addEventListener('click', cancelarEliminar);
 document.getElementById('mOk').addEventListener('click', confirmarEliminar);
 document.getElementById('modal').addEventListener('click', function (evento) {
@@ -111,5 +77,5 @@ document.addEventListener('keydown', function (evento) {
   }
 });
 
-// 5. Primera actualización de contadores
+// 4. Dibujar la tabla por primera vez
 actualizarInventario();

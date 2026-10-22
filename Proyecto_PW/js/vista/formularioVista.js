@@ -65,3 +65,34 @@ function mostrarVistaPrevia(archivo) {
   imagen.src = URL.createObjectURL(archivo);
   imagen.hidden = false;
 }
+
+// Escribe un valor en un campo del formulario
+function escribirCampo(id, valor) {
+  document.getElementById(id).value = valor;
+}
+
+// Solo en editar.html: llena el formulario y los textos con los datos del repuesto
+function llenarFormulario(rep) {
+  escribirCampo('sku', rep.sku);
+  escribirCampo('nombre', rep.nombre);
+  escribirCampo('categoria', rep.categoria);
+  escribirCampo('marca', rep.marca);
+  escribirCampo('comp', rep.comp);
+  escribirCampo('precio', rep.precio.toLocaleString('es-CO'));
+  escribirCampo('cant', rep.stock);
+  escribirCampo('min', rep.min);
+  escribirCampo('ubi', rep.ubi);
+  escribirCampo('prov', rep.prov);
+  escribirCampo('desc', rep.desc);
+
+  let foto = rep.foto;
+  if (!foto) {
+    foto = SIN_FOTO;
+  }
+  document.getElementById('preview').src = foto;
+
+  document.getElementById('modoEdicion').textContent = 'MODO EDICIÓN · ' + rep.sku;
+  document.getElementById('subtituloEdicion').textContent = 'Actualiza la información de ' + rep.nombre + '. Los cambios se aplicarán al registro ' + rep.sku + '.';
+  document.getElementById('resumenIdentidad').innerHTML = '<b>' + escapar(rep.sku) + '</b><br>' + escapar(rep.nombre) + '<br>' + escapar(rep.marca) + ' · ' + escapar(rep.categoria);
+  document.getElementById('resumenExistencias').innerHTML = rep.stock + ' unidades disponibles<br>' + escapar(rep.ubi);
+}

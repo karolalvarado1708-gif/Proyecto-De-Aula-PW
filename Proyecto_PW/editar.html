@@ -42,9 +42,9 @@
 </header>
 <main class="content">
     <div class="page-head"><div>
-        <p class="kicker">MODO EDICIÓN · FIL-001</p>
+        <p class="kicker" id="modoEdicion"></p>
         <h1>Editar repuesto</h1>
-        <p>Actualiza la información de Filtro de aceite. Los cambios se aplicarán al registro FIL-001.</p>
+        <p id="subtituloEdicion"></p>
     </div>
     <a class="btn" href="inventario.html">← Volver al inventario</a>
 </div>
@@ -52,20 +52,20 @@
 <div class="alert ok" id="formOk" role="status" hidden></div>
 <p style="color:var(--mut);font-size:.85rem">Los campos con * son obligatorios.</p>
 <div class="form-grid"><div>
-    <form id="partForm" novalidate>
+    <form id="partForm" data-mode="editar" novalidate>
 <div class="card">
     <h2>Identificación y compatibilidad</h2>
     <p>Datos para encontrar el repuesto correcto.</p>
     <div class="cols">
 <div class="field">
     <label for="sku">Código / SKU *</label>
-    <input id="sku" name="sku" placeholder="Ej. FIL-007" value="FIL-001" data-rule="req">
+    <input id="sku" name="sku" placeholder="Ej. FIL-007" data-rule="req" readonly>
     <div class="hint">Código único del repuesto existente.</div>
     <div class="err" id="sku-err" role="alert" data-default="El SKU es obligatorio."></div>
 </div>
 <div class="field">
     <label for="nombre">Nombre del repuesto *</label>
-    <input id="nombre" name="nombre" placeholder="Ej. Filtro de aceite" value="Filtro de aceite" data-rule="req">
+    <input id="nombre" name="nombre" placeholder="Ej. Filtro de aceite" data-rule="req">
     <div class="hint">&nbsp;</div>
     <div class="err" id="nombre-err" role="alert" data-default="El nombre es obligatorio. Escribe el nombre del repuesto."></div>
 </div>
@@ -73,7 +73,7 @@
     <label for="categoria">Categoría *</label>
     <select id="categoria" name="categoria" data-rule="req">
         <option value="">Selecciona una categoría</option>
-        <option selected>Filtros</option>
+        <option>Filtros</option>
         <option>Frenos</option>
         <option>Encendido</option>
         <option>Suspensión</option>
@@ -84,13 +84,13 @@
 </div>
 <div class="field">
     <label for="marca">Marca *</label>
-    <input id="marca" name="marca" placeholder="Ej. Bosch" value="Bosch" data-rule="req">
+    <input id="marca" name="marca" placeholder="Ej. Bosch" data-rule="req">
     <div class="hint">&nbsp;</div>
     <div class="err" id="marca-err" role="alert" data-default="La marca es obligatoria."></div>
 </div>
 <div class="field full">
     <label for="comp">Compatibilidad vehicular *</label>
-    <input id="comp" name="comp" placeholder="Ej. Renault Logan 1.6 2010–2020" value="Renault Logan / Sandero 1.6 2010–2020" data-rule="req">
+    <input id="comp" name="comp" placeholder="Ej. Renault Logan 1.6 2010–2020" data-rule="req">
     <div class="hint">Indica modelo, motorización y años compatibles.</div>
     <div class="err" id="comp-err" role="alert" data-default="Indica el vehículo compatible."></div>
 </div>
@@ -102,25 +102,25 @@
     <div class="cols">
 <div class="field">
     <label for="precio">Precio de venta (COP) *</label>
-    <input id="precio" name="precio" placeholder="Ej. 38.000" value="38.000" data-rule="price">
+    <input id="precio" name="precio" placeholder="Ej. 38.000" data-rule="price">
     <div class="hint">Pesos colombianos, sin decimales.</div>
     <div class="err" id="precio-err" role="alert" data-default="Ingresa un valor numérico mayor que 0. Ejemplo: 38000."></div>
 </div>
 <div class="field">
     <label for="cant">Cantidad disponible *</label>
-    <input id="cant" name="cant" placeholder="Ej. 18" value="18" data-rule="int">
+    <input id="cant" name="cant" placeholder="Ej. 18" data-rule="int">
     <div class="hint">Unidades físicas disponibles.</div>
     <div class="err" id="cant-err" role="alert" data-default="La cantidad no puede ser negativa. Usa un entero de 0 o más."></div>
 </div>
 <div class="field">
     <label for="min">Stock mínimo *</label>
-    <input id="min" name="min" placeholder="Ej. 5" value="5" data-rule="int">
+    <input id="min" name="min" placeholder="Ej. 5" data-rule="int">
     <div class="hint">Umbral para alertar sobre faltantes.</div>
     <div class="err" id="min-err" role="alert" data-default="Ingresa un entero de 0 o más."></div>
 </div>
 <div class="field">
     <label for="ubi">Ubicación en el taller *</label>
-    <input id="ubi" name="ubi" placeholder="Ej. Estante A-02" value="Estante A-02" data-rule="req">
+    <input id="ubi" name="ubi" placeholder="Ej. Estante A-02" data-rule="req">
     <div class="hint">&nbsp;</div>
     <div class="err" id="ubi-err" role="alert" data-default="Indica dónde está guardado el repuesto."></div>
 </div>
@@ -131,7 +131,7 @@
     <p>Información de apoyo para la reposición.</p>
 <div class="field">
     <label for="prov">Proveedor *</label>
-    <input id="prov" name="prov" placeholder="Ej. Autopartes Andina" value="Autopartes Andina" data-rule="req">
+    <input id="prov" name="prov" placeholder="Ej. Autopartes Andina" data-rule="req">
     <div class="hint">&nbsp;</div>
     <div class="err" id="prov-err" role="alert" data-default="El proveedor es obligatorio."></div>
 </div>
@@ -139,12 +139,11 @@
     <label for="foto">Foto del repuesto</label>
     <input type="file" id="foto" name="foto" accept="image/*">
     <div class="hint">Opcional. JPG o PNG; se recomienda una imagen cuadrada.</div>
-    <img id="preview" class="thumb" src="images/repuestos/filtro-aceite.jpg" alt="Foto actual: Filtro de aceite Bosch" style="margin-top:.6rem;width:96px;height:96px">
+    <img id="preview" class="thumb" alt="Foto actual del repuesto" style="margin-top:.6rem;width:96px;height:96px">
 </div>
 <div class="field" style="margin-top:1rem">
     <label for="desc">Descripción</label>
-    <textarea id="desc" name="desc" placeholder="Referencia técnica, características y recomendaciones…">
-        Filtro de aceite roscado Bosch. Referencia 0451103336. Cambio recomendado según el plan de mantenimiento del vehículo.</textarea>
+    <textarea id="desc" name="desc" placeholder="Referencia técnica, características y recomendaciones…"></textarea>
 </div>
 </div>
 <div class="actions">
@@ -156,17 +155,10 @@
 <aside class="aside">
     <div class="card">
         <h3>Registro actual</h3>
-        <p>
-            <b>FIL-001</b>
-            <br>Filtro de aceite<br>
-            Bosch · Filtros
-        </p>
-            <p>
-                18 unidades disponibles
-                <br>Estante A-02
-            </p>
-            </div>
-            <div class="card tip">
+        <p id="resumenIdentidad"></p>
+        <p id="resumenExistencias"></p>
+    </div>
+    <div class="card tip">
                 <p>Estás modificando un registro existente. No se creará un nuevo repuesto.</p>
             </div>
         </aside>

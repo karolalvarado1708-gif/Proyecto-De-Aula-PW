@@ -1,6 +1,9 @@
 /* ===== VISTA · comunVista.js =====
    Funciones que cambian lo que se ve en pantalla y usan varias páginas. */
 
+// Imagen que se muestra cuando un repuesto no tiene foto
+const SIN_FOTO = 'images/repuestos/sin-foto.svg';
+
 // Cambia caracteres especiales (<, >, &...) para que el texto no se
 // interprete como HTML. Se usa cuando metemos texto del usuario en la página.
 function escapar(texto) {

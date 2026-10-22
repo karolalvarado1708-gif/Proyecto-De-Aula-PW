@@ -2,6 +2,8 @@
    Formulario de nuevo.html y editar.html: revisa los campos con el modelo,
    guarda los datos y le pide a la vista que muestre los mensajes. */
 
+let repuestoEnEdicion = null;   // repuesto que se está editando (solo en editar.html)
+
 // Nombre de cada campo para el mensaje de error general
 const ETIQUETAS = {
   sku: 'SKU',
@@ -42,9 +44,9 @@ function revisarCampo(elemento) {
   return false;
 }
 
-// Último paso: arma el repuesto y lo guarda
-function terminarGuardado(foto) {
-  let repuesto = {
+// Arma el repuesto con lo que el usuario escribió en el formulario
+function armarRepuesto(foto) {
+  return {
     sku: leerCampo('sku').toUpperCase(),
     nombre: leerCampo('nombre'),
     categoria: leerCampo('categoria'),
@@ -58,8 +60,19 @@ function terminarGuardado(foto) {
     desc: leerCampo('desc'),
     foto: foto
   };
+}
 
-  let seGuardo = agregarRepuesto(repuesto);
+// Último paso: guarda el repuesto (nuevo o editado) y vuelve al inventario
+function terminarGuardado(foto) {
+  let repuesto = armarRepuesto(foto);
+  let seGuardo;
+
+  if (formulario.dataset.mode === 'nuevo') {
+    seGuardo = agregarRepuesto(repuesto);
+  } else {
+    seGuardo = actualizarRepuesto(repuestoEnEdicion.sku, repuesto);
+  }
+
   if (!seGuardo) {
     mostrarMensajeError('No se pudo guardar: el navegador no tiene espacio. Prueba con una foto más pequeña.', false);
     return;
@@ -70,6 +83,22 @@ function terminarGuardado(foto) {
   setTimeout(function () {
     window.location.href = 'inventario.html';
   }, 1200);
+}
+
+// Si eligió foto, primero se reduce; cuando esté lista se termina de guardar.
+// Si no eligió, se queda con la foto que ya tenía (fotoActual).
+function guardarConFoto(fotoActual) {
+  let archivo = obtenerArchivoFoto();
+  if (archivo) {
+    reducirFoto(archivo, 400, function (foto) {
+      if (foto === '') {
+        foto = fotoActual;
+      }
+      terminarGuardado(foto);
+    });
+  } else {
+    terminarGuardado(fotoActual);
+  }
 }
 
 // Guardar un repuesto nuevo
@@ -84,15 +113,28 @@ function guardarNuevo() {
     return;
   }
 
-  // Si eligió foto, primero se reduce; cuando esté lista se termina de guardar
-  let archivo = obtenerArchivoFoto();
-  if (archivo) {
-    reducirFoto(archivo, 400, function (foto) {
-      terminarGuardado(foto);
-    });
-  } else {
-    terminarGuardado('');
+  guardarConFoto('');
+}
+
+// Guardar los cambios de un repuesto que ya existe
+function guardarEdicion() {
+  guardarConFoto(repuestoEnEdicion.foto);
+}
+
+// Solo en editar.html: busca el repuesto por el SKU de la dirección
+// (editar.html?sku=FIL-001) y llena el formulario con sus datos
+function cargarRepuestoParaEditar() {
+  let sku = new URLSearchParams(window.location.search).get('sku');
+  if (sku !== null) {
+    repuestoEnEdicion = buscarRepuesto(sku);
   }
+
+  if (repuestoEnEdicion === null) {
+    mostrarMensajeError('No se encontró el repuesto que quieres editar. Vuelve al inventario y elígelo de nuevo.', false);
+    formulario.hidden = true;
+    return;
+  }
+  llenarFormulario(repuestoEnEdicion);
 }
 
 /* ----- Al cargar la página ----- */
@@ -135,7 +177,7 @@ formulario.addEventListener('submit', function (evento) {
   if (formulario.dataset.mode === 'nuevo') {
     guardarNuevo();
   } else {
-    mostrarMensajeOk('Datos válidos. La edición de repuestos existentes llegará en la siguiente entrega.');
+    guardarEdicion();
   }
 });
 
@@ -162,4 +204,9 @@ function activarRevision(campo) {
 }
 for (let i = 0; i < campos.length; i++) {
   activarRevision(campos[i]);
+}
+
+// En editar.html se cargan los datos del repuesto
+if (formulario.dataset.mode === 'editar') {
+  cargarRepuestoParaEditar();
 }
