@@ -7,43 +7,6 @@ const CLAVE_STORAGE = 'ks_inventario';
 
 // Repuestos con los que empieza el inventario la primera vez que se abre la página
 const REPUESTOS_INICIALES = [
-  {
-    sku: 'FIL-001', nombre: 'Filtro de aceite', categoria: 'Filtros', marca: 'Bosch',
-    comp: 'Renault Logan / Sandero 1.6 2010–2020', precio: 38000, stock: 18, min: 5,
-    ubi: 'Estante A-02', prov: 'Autopartes Andina',
-    desc: 'Filtro de aceite roscado Bosch. Referencia 0451103336. Cambio recomendado según el plan de mantenimiento del vehículo.',
-    foto: 'images/repuestos/filtro-aceite.jpg'
-  },
-  {
-    sku: 'FRE-002', nombre: 'Pastillas de freno', categoria: 'Frenos', marca: 'Brembo',
-    comp: 'Chevrolet Aveo 1.6 2006–2015', precio: 125000, stock: 4, min: 6,
-    ubi: 'Estante B-01', prov: 'Autopartes Andina', desc: '',
-    foto: 'images/repuestos/pastillas-freno.jpg'
-  },
-  {
-    sku: 'ENC-003', nombre: 'Bujía de encendido', categoria: 'Encendido', marca: 'NGK',
-    comp: 'Kia Picanto 1.0 2012–2018', precio: 24000, stock: 24, min: 8,
-    ubi: 'Estante C-03', prov: 'Autopartes Andina', desc: '',
-    foto: 'images/repuestos/bujia-encendido.jpg'
-  },
-  {
-    sku: 'FIL-004', nombre: 'Filtro de aire', categoria: 'Filtros', marca: 'Mann',
-    comp: 'Mazda 3 2.0 2014–2019', precio: 52000, stock: 12, min: 4,
-    ubi: 'Estante A-03', prov: 'Autopartes Andina', desc: '',
-    foto: 'images/repuestos/filtro-aire.jpg'
-  },
-  {
-    sku: 'SUS-005', nombre: 'Amortiguador delantero', categoria: 'Suspensión', marca: 'Monroe',
-    comp: 'Renault Duster 1.6 2013–2020', precio: 285000, stock: 3, min: 4,
-    ubi: 'Estante D-01', prov: 'Autopartes Andina', desc: '',
-    foto: 'images/repuestos/amortiguador-delantero.jpg'
-  },
-  {
-    sku: 'MOT-006', nombre: 'Correa de distribución', categoria: 'Motor', marca: 'Gates',
-    comp: 'Chevrolet Spark 1.0 2005–2015', precio: 96000, stock: 8, min: 3,
-    ubi: 'Estante E-02', prov: 'Autopartes Andina', desc: '',
-    foto: 'images/repuestos/correa-distribucion.jpg'
-  }
 ];
 
 // Devuelve la lista de repuestos guardada. La primera vez (cuando no hay
