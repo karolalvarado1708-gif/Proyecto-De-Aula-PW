@@ -5,17 +5,15 @@
 
 const CLAVE_STORAGE = 'ks_inventario';
 
-// Repuestos con los que empieza el inventario la primera vez que se abre la página
-const REPUESTOS_INICIALES = [
-];
 
 // Devuelve la lista de repuestos guardada. La primera vez (cuando no hay
 // nada guardado) guarda y devuelve los repuestos iniciales.
+// Devuelve la lista de repuestos guardada. Si todavía no hay nada
+// guardado, devuelve una lista vacía.
 function obtenerRepuestos() {
   let texto = localStorage.getItem(CLAVE_STORAGE);
   if (texto === null) {
-    guardarRepuestos(REPUESTOS_INICIALES);
-    return REPUESTOS_INICIALES.slice();
+    return [];
   }
   try {
     return JSON.parse(texto) || [];
@@ -37,7 +35,7 @@ function guardarRepuestos(lista) {
 // CREAR: agrega un repuesto nuevo a la lista
 function agregarRepuesto(repuesto) {
   let lista = obtenerRepuestos();
-  lista.push(repuesto);
+  lista.unshift(repuesto);
   return guardarRepuestos(lista);
 }
 
